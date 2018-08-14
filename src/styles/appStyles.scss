@@ -1,0 +1,11 @@
+@import 'themeColors';
+$theme-font:    verdana, sans-serif;
+
+body {
+  font: $theme-font;
+  //background-color: map-get($colors,dark);
+  background-color: map-get($colors,dark);
+  h1, h2 {
+      color: map-get(map-get($colors,primary),light);
+  }
+}
