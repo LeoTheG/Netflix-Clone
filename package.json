@@ -16,6 +16,8 @@
     "webpack-merge": "^4.1.4"
   },
   "dependencies": {
+    "concurrently": "^3.6.1",
+    "express": "^4.16.3",
     "imdb-api": "^4.0.2",
     "node-sass": "^4.9.3",
     "react": "^16.4.2",
@@ -24,7 +26,9 @@
     "webpack-cli": "^3.1.0"
   },
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.config.dev.js --progress --colors",
+    "start": "concurrently \"npm run dev-server\" \"npm run dev-client\"",
+    "dev-server": "nodemon ./server.js",
+    "dev-client": "webpack-dev-server --config ./webpack.config.dev.js --progress --colors",
     "build": "webpack --config ./webpack.config.prod.js --progress --colors"
   }
 }
