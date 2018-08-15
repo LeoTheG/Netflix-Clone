@@ -9,3 +9,22 @@ body {
       color: map-get(map-get($colors,primary),light);
   }
 }
+
+.card-container{
+    position: relative;
+    display: inline-block;
+}
+.center-top{
+  position: absolute;    
+  text-align: center;    
+  width: 100%;
+  z-index: 5;
+}
+.center-top:before{
+  content: '';
+   display: inline-block;
+   height: 100%;
+   vertical-align: middle;
+}
+.image-container{
+}

@@ -6,32 +6,32 @@ export default class Row extends React.Component {
     constructor(props){
         console.log("got props:"+JSON.stringify(props));
         super(props);
-        this.state = {
-            data: props.data,
-        }
+        this.state = {data:props.data};
     }
     componentDidMount() {
-        console.log("component mounted");
-        getMovies();
+    }
+    componentWillReceiveProps(props){
+        this.setState({title: props.title, year:props.year, url:props.url});
     }
     render() {
         return (
             <div class="wrapper">
-                <Card url={this.getUrl()} />
+                <Card data={this.getData(0)}/>
+                <Card data={this.getData(1)} />
+                <Card data={this.getData(2)} />
+                <Card data={this.getData(3)} />
             </div>
         );
     }
-    getUrl(){
-        if(!this.state.data){
+    getData(i){
+
+        if(!this.props.data){
             console.log("data is null");
-            return 'http://image.tmdb.org/t/p/w500///n1y094tVDFATSzkTnFxoGZ1qNsG.jpg';
+            return ({url:"",title:"",year:""})
         }
         else{
             console.log("data is not null");
-            return this.state.data[0].url;
+            return this.props.data[i];
         }
     }
 }
-/*
-<Card url='http://image.tmdb.org/t/p/w500///n1y094tVDFATSzkTnFxoGZ1qNsG.jpg'/>
-*/

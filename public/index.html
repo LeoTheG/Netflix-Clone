@@ -8,14 +8,21 @@
   <title>Netflix</title>
 </head>
 
+<script>
+  var HOST = 'ws://localhost:3000';
+  var ws = new WebSocket(HOST);
+  ws.onopen = () => {
+    console.log("ws is open");
+    ws.send('movie-request', 'popular');
+  }
+</script>
+
 <body>
   <noscript>
     You need to enable JavaScript to run this app.
   </noscript>
   <div id="app"></div>
   <script>
-    var HOST = 'ws://localhost:3000';
-    var ws = new WebSocket(HOST);
 
   </script>
 </body>

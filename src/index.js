@@ -16,14 +16,17 @@ class App extends React.Component {
         };
 
         ws.onmessage = (msg) => {
+            console.log("got message: " + msg.data);
             const parsedMsg = JSON.parse(msg.data);
-            this.state.data = parsedMsg.msg;
-            console.log("msg:" + msg.data);
+            //this.state.data = parsedMsg.msg;
+            this.setState({ data: parsedMsg.msg });
+            //console.log("got message from server: " + JSON.stringify(parsedMsg.msg));
+            console.log("data=" + JSON.stringify(this.state.data));
         }
     }
     render() {
         return (
-            <Row data = {this.state.data} />
+            <Row data={this.state.data} />
         );
     }
 }

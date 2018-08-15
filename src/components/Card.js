@@ -1,20 +1,24 @@
 import React from 'react';
 
 export default class Card extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = {
-            title: props.title,
-            year: props.year,
-            url: props.url
-        }
+        this.state = { title: "", year: "", url: "" };
     }
-    componentWillReceiveProps(props){
-        console.log("getting prooooooops!" + JSON.stringify(props));
+    componentWillReceiveProps(props) {
+        this.setState({ title: props.data.title, year: props.data.year, url: props.data.url });
     }
     render() {
         return (
-            <img src={this.state.url} />
+            <div class="img-container" style={{backgroundImage: "url("+this.state.url+")",
+                width:'300px', height:'200px'}} >
+                <h1 style={{textAlign: 'center'}}>{this.state.title}</h1>
+            </div>
+
         );
     }
 }
+/*
+
+                <img src={this.state.url} />
+                */
