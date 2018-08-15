@@ -20,7 +20,7 @@ module.exports = merge(common, {
         }
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin({ multiStep: true }),
+        new webpack.HotModuleReplacementPlugin(),
     ],
     module: {
         rules: [

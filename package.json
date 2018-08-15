@@ -16,7 +16,9 @@
     "webpack-merge": "^4.1.4"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "concurrently": "^3.6.1",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "imdb-api": "^4.0.2",
     "node-sass": "^4.9.3",

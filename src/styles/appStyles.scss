@@ -8,4 +8,5 @@ body {
   h1, h2 {
       color: map-get(map-get($colors,primary),light);
   }
+  text-align: center;
 }
