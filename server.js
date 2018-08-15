@@ -1,10 +1,11 @@
 const express = require('express');
 const app = express();
 const axios = require('axios');
+const wsServer = require('ws').Server;
 require('dotenv').config();
 
 app.set('port', 3000);
-app.listen(app.get('port'), function () {
+const server = app.listen(app.get('port'), function () {
     console.log('Express server started on port ' + app.get('port'));
 });
 
@@ -32,8 +33,7 @@ app.get('/api/movies/popular', (req, res) => {
     })
 })
 app.get('/api/*', (req, res) => {
-    res.send('hi');
-    console.log("whoah!");
+    res.send('<h1 style="text-align:center">Did you come to the wrong place?</h1>');
 })
 
 getMovies = {
@@ -67,7 +67,6 @@ getMovies = {
                     ((callback)=>{
                         //extract url
                         getMovies.images(tmdbId, (img) => {
-                            console.log("checking id: " + tmdbId);
                             const url = apiUrl.tmdb.image + '/w' + posterWidth + '//' + img.data.backdrops[0]['file_path'];
                             // after getting url, get titles + etc.
                             callback(url);
@@ -102,4 +101,23 @@ authorize = () => {
     }).then((res) => {
         console.log(res);
     }).catch((err) => { console.log(err) });
+}
+
+//-----websockets------//
+wss = new wsServer({ server: server });
+wss.on('connection', (ws) => {
+    console.log("connected to a user");
+    ws.on('message', (msg) => {
+        //const parsedMsg = JSON.parse(msg);
+        getMovies.combined((data) => {
+            send('movies', data, ws);
+        })
+    });
+})
+function send(type, msg, ws) {
+    const message = {
+        type: type,
+        msg: msg
+    }
+    ws.send(JSON.stringify(message));
 }

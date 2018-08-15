@@ -4,12 +4,17 @@ export default class Card extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            width: window.innerWidth/6,
+            title: props.title,
+            year: props.year,
+            url: props.url
         }
+    }
+    componentWillReceiveProps(props){
+        console.log("getting prooooooops!" + JSON.stringify(props));
     }
     render() {
         return (
-            <h1>Width of ur screen/6 is {this.state.width}</h1>
+            <img src={this.state.url} />
         );
     }
 }

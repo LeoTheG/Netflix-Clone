@@ -4,25 +4,33 @@ import ReactDOM from 'react-dom';
 import '../src/styles/app.css';
 import '../src/styles/appStyles.scss';
 
-import Card from './components/Card.js';
+import Row from './components/Row.js';
+
 
 class App extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             value: "something",
+            data: null,
         };
+
+        ws.onmessage = (msg) => {
+            const parsedMsg = JSON.parse(msg.data);
+            this.state.data = parsedMsg.msg;
+            console.log("msg:" + msg.data);
+        }
     }
-    render(){
-        return(
-            <Card />
+    render() {
+        return (
+            <Row data = {this.state.data} />
         );
     }
 }
 
 ReactDOM.render(<App />,
-  document.getElementById('app'),
+    document.getElementById('app'),
 );
 if (module.hot) {
-  module.hot.accept();
+    module.hot.accept();
 }
