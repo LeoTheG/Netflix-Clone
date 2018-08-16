@@ -10,15 +10,10 @@ export default class Card extends React.Component {
     }
     render() {
         return (
-            <div class="img-container" style={{backgroundImage: "url("+this.state.url+")",
-                width:'300px', height:'200px'}} >
-                <h1 style={{textAlign: 'center'}}>{this.state.title}</h1>
+            <div class="img-container" style={{backgroundImage: "url("+this.state.url+")"}}>
+                <h1 class="poster-title">{this.state.title}</h1>
             </div>
 
         );
     }
 }
-/*
-
-                <img src={this.state.url} />
-                */

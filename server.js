@@ -4,6 +4,11 @@ const axios = require('axios');
 const wsServer = require('ws').Server;
 require('dotenv').config();
 
+
+const posterWidth = 500;
+const posterLimit = 6;
+
+
 app.set('port', 3000);
 const server = app.listen(app.get('port'), function () {
     console.log('Express server started on port ' + app.get('port'));
@@ -26,20 +31,23 @@ const defaultHeaders = {
     'trakt-api-key': process.env.client_id,
     'trakt-api-version': 2,
 }
-const posterWidth = 500;
 app.get('/api/movies/popular', (req, res) => {
     getMovies.combined((data) => {
         res.send(data);
-    })
+    },1)
 })
 app.get('/api/*', (req, res) => {
     res.send('<h1 style="text-align:center">Did you come to the wrong place?</h1>');
 })
 
 getMovies = {
-    popular: (callback) => {
+    popular: (callback,page) => {
         axios.get(apiUrl.base + apiUrl.movies.popular, {
-            headers: defaultHeaders
+            headers: defaultHeaders,
+            params: {
+                page: page,
+                limit: posterLimit
+            }
         }).then((res) => {
             callback(res);
         }).catch((err) => {
@@ -56,7 +64,7 @@ getMovies = {
         })
     },
     // crazy callback code that gets popular movie titles, years, and urls
-    combined: (callback) => {
+    combined: (callback,page) => {
         const list = [];
         getMovies.popular((val) => {
             const movies = val.data;
@@ -76,8 +84,7 @@ getMovies = {
                         const title = movies[movie].title;
                         const year = movies[movie].year;
                         list.push({ title: title, year: year, url: url });
-                        counter++;
-                        if(counter==movies.length-1){
+                        if(list.length==movies.length){
                             // after list of movies is full, exit loop
                             call(list);
                         }
@@ -86,7 +93,7 @@ getMovies = {
             })((list)=>{
                 callback(list);
             });
-        });
+        },page);
     }
 }
 
@@ -108,10 +115,15 @@ wss = new wsServer({ server: server });
 wss.on('connection', (ws) => {
     console.log("connected to a user");
     ws.on('message', (msg) => {
-        //const parsedMsg = JSON.parse(msg);
-        getMovies.combined((data) => {
-            send('movies', data, ws);
-        })
+        const parsedMsg = JSON.parse(msg);
+        const request = parsedMsg.request;
+        if(request=='movie-request'){
+            const page = parsedMsg.msg.page;
+            // todo: check for movie type: popular
+            getMovies.combined((data) => {
+                send('movies', {page: page,data:data}, ws);
+            },page)
+        }
     });
 })
 function send(type, msg, ws) {

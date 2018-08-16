@@ -12,8 +12,8 @@
   var HOST = 'ws://localhost:3000';
   var ws = new WebSocket(HOST);
   ws.onopen = () => {
-    console.log("ws is open");
-    ws.send('movie-request', 'popular');
+    ws.send(JSON.stringify({request:'movie-request',msg: {page:1, type: 'popular'}}));
+    ws.send(JSON.stringify({request:'movie-request',msg: {page:2, type: 'popular'}}));
   }
 </script>
 

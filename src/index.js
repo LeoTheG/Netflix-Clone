@@ -11,22 +11,29 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: "something",
-            data: null,
+            data: [],
         };
 
         ws.onmessage = (msg) => {
-            console.log("got message: " + msg.data);
             const parsedMsg = JSON.parse(msg.data);
-            //this.state.data = parsedMsg.msg;
-            this.setState({ data: parsedMsg.msg });
-            //console.log("got message from server: " + JSON.stringify(parsedMsg.msg));
-            console.log("data=" + JSON.stringify(this.state.data));
+            const page = parsedMsg.msg.page;
+            const data = parsedMsg.msg.data;
+            //this.setState({ data: parsedMsg.msg });
+            // data organized by page = index
+            //this.state.data.push(data);
+            const newData = this.state.data;
+            console.log("pushed new data for page: " + page);
+            newData.push(data);
+            this.setState({data: newData});
+            //console.log("data=" + JSON.stringify(this.state.data));
         }
     }
     render() {
         return (
-            <Row data={this.state.data} />
+            <div class="rows">
+                <Row data={this.state.data[0]} id='1' />
+                <Row data={this.state.data[1]} id='2' />
+            </div>
         );
     }
 }
