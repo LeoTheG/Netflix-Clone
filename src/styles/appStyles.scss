@@ -41,13 +41,16 @@ body {
   height: calc(100vh/5);
   background-position: center;
   background-repeat: no-repeat;
-  transition: 0.5s;
+  transition: 0.25s;
 }
 .img-container:hover{
   width: calc(16.6vw*1.5);
   height: calc(100vh/5*1.5);
   margin-top: -5vh;
 }
-#row-2{
-  margin-top:25vh;
+$numRows: 4;
+@for $i from 2 through $numRows{
+  #row-#{$i}{
+    margin-top: 25vh;
+  }
 }

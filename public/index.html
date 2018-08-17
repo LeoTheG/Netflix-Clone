@@ -5,15 +5,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="theme-color" content="#000000">
-  <title>Netflix</title>
+  <title>Netflix Clone</title>
 </head>
 
 <script>
   var HOST = 'ws://localhost:3000';
   var ws = new WebSocket(HOST);
   ws.onopen = () => {
+    //make requests for popular movies
+    /*
+    for(let i = 0; i < 3; i++){
+      ws.send(JSON.stringify({request:'movie-request',msg: {page:i, type: 'popular'}}));
+    }
+    */
     ws.send(JSON.stringify({request:'movie-request',msg: {page:1, type: 'popular'}}));
     ws.send(JSON.stringify({request:'movie-request',msg: {page:2, type: 'popular'}}));
+    ws.send(JSON.stringify({request:'movie-request',msg: {page:3, type: 'popular'}}));
+    ws.send(JSON.stringify({request:'movie-request',msg: {page:4, type: 'popular'}}));
   }
 </script>
 

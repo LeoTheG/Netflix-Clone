@@ -33,6 +33,8 @@ class App extends React.Component {
             <div class="rows">
                 <Row data={this.state.data[0]} id='1' />
                 <Row data={this.state.data[1]} id='2' />
+                <Row data={this.state.data[2]} id='3' />
+                <Row data={this.state.data[3]} id='4' />
             </div>
         );
     }

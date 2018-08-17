@@ -10,7 +10,7 @@ export default class Row extends React.Component {
     render() {
         return (
             <div id={'row-' + this.state.id}>
-                <h1>Popular Movies</h1>
+                <h1>Popular Movies {this.state.id}</h1>
                 <div class="row-cards">
                     <Card data={this.getData(0)}/>
                     <Card data={this.getData(1)} />
