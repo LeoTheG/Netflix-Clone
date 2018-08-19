@@ -51,5 +51,6 @@ module: {
 output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'app'),
+    publicPath: '/'
   },
 };

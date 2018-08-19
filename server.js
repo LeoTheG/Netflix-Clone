@@ -6,6 +6,7 @@ require('dotenv').config();
 
 
 const posterWidth = 500;
+const moviePageWidth = 780;
 const posterLimit = 6;
 
 
@@ -20,6 +21,7 @@ const apiUrl = {
     movies: {
         popular: '/movies/popular',
         trending: '/movies/trending',
+        summary: '/movies/',
     },
     tmdb: {
         base: 'https://api.themoviedb.org/3',
@@ -56,6 +58,7 @@ getMovies = {
     },
     images: (id, callback) => {
         axios.get(apiUrl.tmdb.base + '/movie/' + id + '/images', {
+            headers: defaultHeaders,
             params: {
                 api_key: process.env.tmdb_key
             }
@@ -72,6 +75,7 @@ getMovies = {
                 let counter = 0;
                 for (const movie in movies) {
                     const tmdbId = movies[movie].ids.tmdb;
+                    const slug = movies[movie].ids.slug;
                     ((callback)=>{
                         //extract url
                         getMovies.images(tmdbId, (img) => {
@@ -83,7 +87,7 @@ getMovies = {
                         // extract title, year
                         const title = movies[movie].title;
                         const year = movies[movie].year;
-                        list.push({ title: title, year: year, url: url });
+                        list.push({ title: title, year: year, url: url, slug: slug});
                         if(list.length==movies.length){
                             // after list of movies is full, exit loop
                             call(list);
@@ -94,6 +98,25 @@ getMovies = {
                 callback(list);
             });
         },page);
+    },
+    summary: (slug,callback) => {
+        axios.get(apiUrl.base + apiUrl.movies.summary + slug, {
+            headers: defaultHeaders,
+            params: {
+                extended: 'full'
+            }
+        }).then((value) => {
+            const tmdbId = value.data.ids.tmdb;
+            //callback(value)res;
+            getMovies.images(tmdbId, (img) => {
+                const url = apiUrl.tmdb.image + '/w' + moviePageWidth + '//' + img.data.backdrops[0]['file_path'];
+                // after getting url, get titles + etc.
+                value.data.url = url;
+                callback(value);
+            })
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 }
 
@@ -121,14 +144,29 @@ wss.on('connection', (ws) => {
             const page = parsedMsg.msg.page;
             // todo: check for movie type: popular
             getMovies.combined((data) => {
-                send('movies', {page: page,data:data}, ws);
+                send('movie-response', {page: page,data:data}, ws);
             },page)
+        }
+        else if(request=='movie-summary-request'){
+            const slug = parsedMsg.msg;
+            getMovies.summary(slug,(value)=>{
+                const dat = {
+                    title: value.data.title,
+                    year: value.data.year,
+                    tagline: value.data.tagline,
+                    overview: value.data.overview,
+                    genres: value.data.genres,
+                    certification: value.data.certification,
+                    url: value.data.url,
+                }
+                send('movie-summary-response',{data:dat},ws);
+            });
         }
     });
 })
 function send(type, msg, ws) {
     const message = {
-        type: type,
+        response: type,
         msg: msg
     }
     ws.send(JSON.stringify(message));

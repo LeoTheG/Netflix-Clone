@@ -8,12 +8,17 @@ body {
   h1, h2 {
       //color: map-get(map-get($colors,primary),light);
       color: white;
+      font-family: 'Lato', sans-serif;
+  }
+  h1{
+    font-size:3em;
   }
 }
 
 .poster-title{
-  font-size: 2vw;
+  font-size: 2em;
   text-align: center;
+  text-shadow: 2px 2px #000000;
 }
 
 .card-container{
@@ -48,9 +53,36 @@ body {
   height: calc(100vh/5*1.5);
   margin-top: -5vh;
 }
+
+//Movie css
+#movie-page{
+  text-align:center;
+}
+.movie-page-image{
+  height: calc(100vh/3);
+}
+.movie-page-overview{
+  width:50%;
+  margin-left:25%;
+  margin-top: 1em;
+}
+.fa-arrow-left{
+  font-size: 5em;
+  color:white;
+  text-align:left;
+  margin-right:95%;
+  margin-top:1.5%;
+  cursor:pointer;
+}
+
 $numRows: 4;
 @for $i from 2 through $numRows{
   #row-#{$i}{
     margin-top: 25vh;
+  }
+}
+@media only screen and (max-width: 600px){
+  .poster-title{
+    display:none;
   }
 }
